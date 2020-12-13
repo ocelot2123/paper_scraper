@@ -1,0 +1,19 @@
+FROM python:3
+ENV PYTHONUNBUFFERED 1
+
+ARG DJANGO_ALLOWED_HOSTS
+ARG SECRET_KEY
+ARG CORS_ORIGIN_WHITELIST
+
+ENV DJANGO_ALLOWED_HOSTS $DJANGO_ALLOWED_HOSTS
+ENV SECRET_KEY $SECRET_KEY
+ENV CORS_ORIGIN_WHITELIST $CORS_ORIGIN_WHITELIST
+
+RUN mkdir /backend
+WORKDIR /backend
+COPY requirements.txt /backend/
+EXPOSE 8000
+RUN pip install -r requirements.txt
+COPY . /backend/
+RUN python manage.py makemigrations
+RUN python manage.py migrate
